@@ -2,3 +2,4 @@ python/populateDatabase/__pycache__
 python/populateDatabase/.env
 python/populateDatabase/StockData.db
 python/venv
+.DS_Store
