@@ -1,6 +1,6 @@
 #include "WhereClauses.h"
 #include "ColumnDef.h"
-#include "ColumnDefTypes.cpp"
+#include "ColumnDefTypes.h"
 
 #include <sstream>
 #include <stdexcept>
@@ -21,7 +21,7 @@ void WhereClauses::assertMatchingTypes(ColumnDefTypes& type, T value) {
     bool intMatch = type == ColumnDefTypes::IntegerDef && is_same<T, int>::value;
 
     if (!stringMatch && !floatMatch && !intMatch) {
-        throw runtime_error("Value Type does not match Column Type")
+        throw runtime_error("Value Type does not match Column Type");
     }
 }
 

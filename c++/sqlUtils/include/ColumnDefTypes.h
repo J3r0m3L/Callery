@@ -1,3 +1,5 @@
+#pragma once
+
 enum class ColumnDefTypes {
     StringDef,
     FloatDef,

@@ -1,5 +1,5 @@
 #include "ColumnDef.h"
-#include "ColumnDefTypes.cpp"
+#include "ColumnDefTypes.h"
 #include <string>
 
 using std::string;
