@@ -3,13 +3,20 @@ FROM ubuntu:24.04
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
+    build-essential \
     cmake
 
-WORKDIR /stockAggregatesStore
+WORKDIR /app
 
-COPY . /stockAggregatesStore/service
-COPY ../sqlUtils /stockAggregatesStore/sqlUtils
+COPY stockAggregatesStore /app/service
+COPY sqlUtils /app/sqlUtils
 
-EXPOSE 8080
+RUN cd service && \
+    mkdir -p build && \
+    cd build && \
+    cmake .. && \
+    cmake --build .
 
-CMD ["./build/service"]
+# EXPOSE 8080
+
+CMD ["./service/build/StockAggregatesStore"]
