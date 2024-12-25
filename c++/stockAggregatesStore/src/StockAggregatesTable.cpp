@@ -1,4 +1,5 @@
 #include "StockAggregatesTable.h"
+#include "crow.h"
 
 #include <SqlQueryBuilder.h>
 #include <WhereClauses.h>

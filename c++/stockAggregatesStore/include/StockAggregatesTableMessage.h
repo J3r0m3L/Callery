@@ -30,12 +30,14 @@ public:
     );
 
     const string& getTicker() const;
-    int getTimestamp();
-    float getClose();
-    float getHigh();
-    float getLow();
-    float getTransactions();
-    float getOpen();
-    float getVolume();
-    float getVwap();
+    const int getTimestamp() const;
+    const float getClose() const;
+    const float getHigh() const;
+    const float getLow() const;
+    const float getTransactions() const;
+    const float getOpen() const;
+    const float getVolume() const;
+    const float getVwap() const;
+
+    operator crow::json::wvalue() const;
 };
