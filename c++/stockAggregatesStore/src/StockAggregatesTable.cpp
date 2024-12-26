@@ -1,9 +1,9 @@
 #include "StockAggregatesTable.h"
-#include "crow.h"
 
 #include <SqlQueryBuilder.h>
 #include <WhereClauses.h>
 
+#include <crow.h>
 #include <vector>
 #include <sqlite3.h>
 
@@ -48,8 +48,8 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
 
     SqlQueryBuilder builder = SqlQueryBuilder(this->_tablename, columns);
     WhereClauses whereClauses = WhereClauses();
-    
-    if (query.getTicker().has_value()) whereClauses.addWhereEquals(this->TICKER, query.getTicker());
+
+    if (query.getTicker().has_value()) whereClauses.addWhereEquals(this->TICKER, *query.getTicker());
 
     if (query.getTimestampRange().has_value()) {
         whereClauses.addWhereGreaterThanOrEquals(this->TIMESTAMP, query.getTimestampRange()->first);
@@ -93,7 +93,6 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
 
     sqlite3* DB;
     int exit = sqlite3_open("stock.db", &DB);
-    // if exit then produce error in logs
     
     vector<StockAggregatesTableMessage> msgs; 
     char* errorMessage;

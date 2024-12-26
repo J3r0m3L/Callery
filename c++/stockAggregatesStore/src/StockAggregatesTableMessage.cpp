@@ -1,6 +1,6 @@
 #include "StockAggregatesTableMessage.h"
-#include "crow.h"
 
+#include <crow.h>
 #include <string>
 
 using std::string;

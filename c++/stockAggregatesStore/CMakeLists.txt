@@ -1,18 +1,19 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.30.6)
+
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 project(StockAggregatesStore)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
+add_subdirectory(../sqlUtils ${CMAKE_BINARY_DIR}/sqlUtils)
 
-add_subdirectory(../sqlUtils ${CMAKE_BINARY_DIR}/build)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
+include_directories("/usr/local/include")
 
-add_executable(StockAggregatesStore src/Main.cpp)
+find_package(SQLite3 REQUIRED)
 
-target_link_libraries(StockAggregatesStore SqlQueryBuilder)
-target_include_directories(StockAggregatesStore
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/../sqlUtils/include
-)
+file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
+add_executable(stockAggregatesStore ${SOURCES})
+
+target_link_libraries(stockAggregatesStore sqlQueryBuilder SQLite3)
+target_include_directories(stockAggregatesStore PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include SQLite::SQLite3)

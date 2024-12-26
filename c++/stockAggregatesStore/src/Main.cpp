@@ -1,6 +1,6 @@
 #include "StockAggregatesTable.h"
-#include "crow.h"
 
+#include <crow.h>
 #include <SqlQueryBuilder.h>
 #include <iostream>
 #include <optional>
