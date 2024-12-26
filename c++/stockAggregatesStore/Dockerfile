@@ -6,7 +6,9 @@ RUN apt update && apt install -y \
     build-essential \
     cmake \
     libasio-dev \
-    git
+    sqlite3 \
+    libsqlite3-dev \
+    git && apt clean
     
 RUN apt update && apt install -y software-properties-common && \
     add-apt-repository ppa:deadsnakes/ppa && \
@@ -20,24 +22,17 @@ RUN cd /usr/local/include && \
     cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
     make install
 
-
 WORKDIR /app
 
 COPY stockAggregatesStore /app/service
 COPY sqlUtils /app/sqlUtils
 
-RUN cd sqlUtils && \
-    mkdir -p build && \
-    cd build && \
-    cmake .. && \
-    cmake --build .
-
 RUN cd service && \
     mkdir -p build && \
     cd build && \
     cmake .. && \
-    cmake --build .
+    make
 
 # EXPOSE 8080
 
-CMD ["./service/build/StockAggregatesStore"]
+CMD ["./service/build/stockAggregatesStore"]
