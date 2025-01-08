@@ -19,7 +19,7 @@ public:
     const char* build() const;
 
 private:
-    string _tableName;
-    optional<WhereClauses> _whereClauses;
-    vector<ColumnDef> _columns;
+    string tableName_;
+    optional<WhereClauses> whereClauses_;
+    vector<ColumnDef> columns_;
 };

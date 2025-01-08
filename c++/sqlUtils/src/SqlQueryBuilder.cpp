@@ -9,12 +9,12 @@ using std::stringstream;
 using std::vector;
 
 SqlQueryBuilder::SqlQueryBuilder(const string& tableName, const vector<ColumnDef>& columns) {
-    _tableName = tableName;
-    _columns = columns;
+    tableName_ = tableName;
+    columns_ = columns;
 }
 
 SqlQueryBuilder& SqlQueryBuilder::whereClauses(const WhereClauses& whereClauses) {
-    _whereClauses = whereClauses;
+    whereClauses_ = whereClauses;
     return *this;
 }
 
@@ -22,14 +22,14 @@ const char* SqlQueryBuilder::build() const {
     stringstream ss;
     ss << "SELECT ";
 
-    for (int i = 0; i < _columns.size() - 1; i++) {
-        ss << _columns.at(i).getColumnName() + ", ";
+    for (int i = 0; i < columns_.size() - 1; i++) {
+        ss << columns_.at(i).getColumnName() + ", ";
     }
-    ss << _columns.at(_columns.size() - 1).getColumnName();
-    ss << " FROM" << _tableName + " ";
+    ss << columns_.at(columns_.size() - 1).getColumnName();
+    ss << " FROM" << tableName_ + " ";
 
-    if (_whereClauses.has_value()) {
-        ss << _whereClauses->build();
+    if (whereClauses_.has_value()) {
+        ss << whereClauses_->build();
     }
     ss << ";";
     const string& tmp = ss.str();
