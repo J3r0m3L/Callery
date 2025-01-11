@@ -1,4 +1,4 @@
-#include "StockAggregatesTableMessage.h"
+#include "StockAggregatesTableMessage.hpp"
 
 #include <crow.h>
 #include <string>

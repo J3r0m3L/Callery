@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ColumnDefTypes.h"
+#include "ColumnDefTypes.hpp"
 #include <string> 
 
 using std::string;

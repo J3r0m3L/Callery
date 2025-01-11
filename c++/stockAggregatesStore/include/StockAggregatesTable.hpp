@@ -1,10 +1,10 @@
 #pragma once
 
-#include "StockAggregatesTableMessage.h"
-#include "StockAggregatesTableQuery.h"
+#include "StockAggregatesTableMessage.hpp"
+#include "StockAggregatesTableQuery.hpp"
 
-#include <ColumnDef.h>
-#include <ColumnDefTypes.h>
+#include <ColumnDef.hpp>
+#include <ColumnDefTypes.hpp>
 
 #include <string>
 #include <vector>

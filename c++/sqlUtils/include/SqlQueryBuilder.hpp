@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ColumnDef.h"
-#include "WhereClauses.h"
+#include "ColumnDef.hpp"
+#include "WhereClauses.hpp"
 
 #include <optional>
 #include <string>

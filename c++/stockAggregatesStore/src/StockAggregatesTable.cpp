@@ -1,7 +1,7 @@
-#include "StockAggregatesTable.h"
+#include "StockAggregatesTable.hpp"
 
-#include <SqlQueryBuilder.h>
-#include <WhereClauses.h>
+#include <SqlQueryBuilder.hpp>
+#include <WhereClauses.hpp>
 
 #include <crow.h>
 #include <vector>

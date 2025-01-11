@@ -1,4 +1,4 @@
-#include "SqlQueryBuilder.h"
+#include "SqlQueryBuilder.hpp"
 
 #include <sstream>
 #include <string>

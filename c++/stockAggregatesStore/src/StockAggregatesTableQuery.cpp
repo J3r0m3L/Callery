@@ -1,4 +1,4 @@
-#include "StockAggregatesTableQuery.h"
+#include "StockAggregatesTableQuery.hpp"
 
 #include <string>
 #include <utility>

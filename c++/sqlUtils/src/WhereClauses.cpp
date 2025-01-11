@@ -1,6 +1,6 @@
-#include "WhereClauses.h"
-#include "ColumnDef.h"
-#include "ColumnDefTypes.h"
+#include "WhereClauses.hpp"
+#include "ColumnDef.hpp"
+#include "ColumnDefTypes.hpp"
 
 #include <sstream>
 #include <string>
