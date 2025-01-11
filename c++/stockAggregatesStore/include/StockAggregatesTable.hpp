@@ -15,7 +15,8 @@ using std::vector;
 class StockAggregatesTable {
 
 private:
-    string _tablename;
+    string tablename_;
+    char* directory_;
     ColumnDef TICKER = ColumnDef("ticker", ColumnDefTypes::StringDef);
     ColumnDef TIMESTAMP = ColumnDef("timestamp", ColumnDefTypes::IntegerDef);
     ColumnDef CLOSE = ColumnDef("close", ColumnDefTypes::FloatDef);
@@ -27,6 +28,7 @@ private:
     ColumnDef VWAP = ColumnDef("vwap", ColumnDefTypes::FloatDef);
 
 public:
-    StockAggregatesTable(string tablename);
+    StockAggregatesTable(string tablename, char* directory);
+    ~StockAggregatesTable();
     vector<StockAggregatesTableMessage> queryStockAggregatesTable(StockAggregatesTableQuery query);
 };

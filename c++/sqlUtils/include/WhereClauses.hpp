@@ -8,7 +8,9 @@
 #include <type_traits>
 #include <vector>
 
+using std::enable_if_t;
 using std::is_same;
+using std::is_same_v;
 using std::runtime_error;
 using std::string;
 using std::stringstream;
@@ -34,7 +36,7 @@ private:
 public:
     WhereClauses();
 
-    template<typename T> // these shouldn't just be declarations they should also be definitions
+    template<typename T>
     void addWhereEquals(ColumnDef& column, T value) {
         this->assertMatchingTypes(column.getColumnType(), value);
         stringstream ss;
@@ -43,7 +45,7 @@ public:
         this->clauses.at(i).push_back(ss.str());
     }
 
-    template<typename T>
+    template<typename T, typename = enable_if_t<!is_same_v<T, string>>>
     void addWhereLessThan(ColumnDef& column, T value) {
         this->assertMatchingTypes(column.getColumnType(), value);
         stringstream ss;
@@ -52,7 +54,7 @@ public:
         this->clauses.at(i).push_back(ss.str());
     }
 
-    template<typename T>
+    template<typename T, typename = enable_if_t<!is_same_v<T, string>>>
     void addWhereLessThanOrEquals(ColumnDef& column, T value) {
         this->assertMatchingTypes(column.getColumnType(), value);
         stringstream ss;
@@ -61,7 +63,7 @@ public:
         this->clauses.at(i).push_back(ss.str());
     }
 
-    template<typename T> 
+    template<typename T, typename = enable_if_t<!is_same_v<T, string>>>
     void addWhereGreaterThan(ColumnDef& column, T value) {
         this->assertMatchingTypes(column.getColumnType(), value);
         stringstream ss;
@@ -69,8 +71,8 @@ public:
         int i =this->clauses.size() - 1;
         this->clauses.at(i).push_back(ss.str());
     }
-
-    template<typename T>
+    
+    template<typename T, typename = enable_if_t<!is_same_v<T, string>>>
     void addWhereGreaterThanOrEquals(ColumnDef& column, T value) {
         this->assertMatchingTypes(column.getColumnType(), value);
         stringstream ss;

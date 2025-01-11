@@ -3,7 +3,8 @@ c++/stockAggregatesStore/build
 c++/Crow
 python/populateDatabase/__pycache__
 python/populateDatabase/.env
-python/populateDatabase/StockData.db
 python/venv
 .DS_Store
 .ipynb_checkpoints
+.vscode
+StockData.db

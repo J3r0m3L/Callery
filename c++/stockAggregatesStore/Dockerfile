@@ -33,6 +33,6 @@ RUN cd service && \
     cmake .. && \
     make
 
-# EXPOSE 8080
+EXPOSE 8080
 
 CMD ["./service/build/stockAggregatesStore"]

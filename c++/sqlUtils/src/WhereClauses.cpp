@@ -14,13 +14,26 @@ WhereClauses::WhereClauses() {
     this->clauses.push_back({});
 }
 
+template <>
+void WhereClauses::addWhereEquals(ColumnDef& column, string value) {
+    this->assertMatchingTypes(column.getColumnType(), value);
+    stringstream ss;
+    ss << column.getColumnName() << "=" << "'" << value << "'";
+    int i = this->clauses.size() - 1;
+    this->clauses.at(i).push_back(ss.str());
+}
+
 void WhereClauses::addOrOperator() {
     this->clauses.push_back({});
 }
 
 string WhereClauses::build() const {
+    if (clauses[0].size() == 0) {
+        return "";
+    }
+
     stringstream ss;
-    ss << "WHERE "; 
+    ss << " WHERE "; 
 
     int lastCol = clauses.size() - 1;
 

@@ -16,7 +16,7 @@ class SqlQueryBuilder {
 public:
     SqlQueryBuilder(const string& tableName, const vector<ColumnDef>& columns);
     SqlQueryBuilder& whereClauses(const WhereClauses& whereClauses);
-    const char* build() const;
+    const string build() const;
 
 private:
     string tableName_;

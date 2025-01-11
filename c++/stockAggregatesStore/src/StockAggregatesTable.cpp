@@ -1,4 +1,5 @@
 #include "StockAggregatesTable.hpp"
+#include "StockAggregatesTableMessage.hpp"
 
 #include <SqlQueryBuilder.hpp>
 #include <WhereClauses.hpp>
@@ -11,7 +12,18 @@ using std::vector;
 using std::stoi;
 using std::stof;
 
-StockAggregatesTable::StockAggregatesTable(string tablename): _tablename(tablename) {};
+StockAggregatesTable::StockAggregatesTable(string tablename, char* directory): tablename_(tablename), directory_(directory) {
+    sqlite3* DB;
+    int errorMsg = 0;
+    if ((errorMsg = sqlite3_open_v2(directory_, &DB, SQLITE_OPEN_READONLY, NULL)) == SQLITE_OK) {
+        CROW_LOG_INFO << "Database Connected";
+    } else {
+        CROW_LOG_WARNING << "Database Failed To Connect: " << errorMsg;
+    }
+    sqlite3_close_v2(DB);
+}
+
+StockAggregatesTable::~StockAggregatesTable() { delete this->directory_; }
 
 static int buildSATMMessages(void* data, int argc, char** argv, char** azColNmae) {
     vector<StockAggregatesTableMessage>* msgs = static_cast<vector<StockAggregatesTableMessage>*>(data);
@@ -33,7 +45,6 @@ static int buildSATMMessages(void* data, int argc, char** argv, char** azColNmae
 }
 
 vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTable(StockAggregatesTableQuery query) {
-
     vector<ColumnDef> columns = {
         this->TICKER,
         this->TIMESTAMP,
@@ -45,8 +56,8 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
         this->VOLUME,
         this->VWAP
     };
-
-    SqlQueryBuilder builder = SqlQueryBuilder(this->_tablename, columns);
+    
+    SqlQueryBuilder builder = SqlQueryBuilder(this->tablename_, columns);
     WhereClauses whereClauses = WhereClauses();
 
     if (query.getTicker().has_value()) whereClauses.addWhereEquals(this->TICKER, *query.getTicker());
@@ -92,13 +103,31 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
     }
 
     sqlite3* DB;
-    int exit = sqlite3_open("stock.db", &DB);
-    
-    vector<StockAggregatesTableMessage> msgs; 
-    char* errorMessage;
-    sqlite3_exec(DB, builder.whereClauses(whereClauses).build(), buildSATMMessages, &msgs, &errorMessage);
+    sqlite3_stmt* stmt;
+    int errMsg = 0;
 
-    sqlite3_close(DB);
-    delete errorMessage;
+    vector<StockAggregatesTableMessage> msgs = {};
+
+    if ((errMsg = sqlite3_open_v2(directory_, &DB, SQLITE_OPEN_READONLY, NULL)) == SQLITE_OK) {
+        sqlite3_prepare_v2(DB, builder.whereClauses(whereClauses).build().c_str(), -1, &stmt, NULL);
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            msgs.push_back(StockAggregatesTableMessage(
+                string((char*) sqlite3_column_text(stmt, 0)),
+                sqlite3_column_int(stmt, 1),
+                (float) sqlite3_column_double(stmt, 2),
+                (float) sqlite3_column_double(stmt, 3),
+                (float) sqlite3_column_double(stmt, 4),
+                (float) sqlite3_column_double(stmt, 5),
+                (float) sqlite3_column_double(stmt, 6),
+                (float) sqlite3_column_double(stmt, 7),
+                (float) sqlite3_column_double(stmt, 8)
+            ));
+        }
+        sqlite3_finalize(stmt);
+        sqlite3_close(DB);
+    } else {
+        CROW_LOG_WARNING << "Database Failed To Connect: " << errMsg;
+    }
+
     return msgs;
 }

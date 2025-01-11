@@ -19,17 +19,7 @@ int main() {
 
     crow::SimpleApp app;
 
-    CROW_ROUTE(app, "/test")
-    ([](const crow::request& req, crow::response& res) {
-        res.set_header("Access-Control-Allow-Origin", "*");
-        res.set_header("Access-Control-Allow-Methods", "GET");
-        res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        res.set_header("Content-Type", "application/json");
-        res.write(R"({"message": "Hello from Crow!"})");
-        res.end();
-    });
-
-    StockAggregatesTable table = StockAggregatesTable("StockAggregates");
+    StockAggregatesTable table = StockAggregatesTable("StockAggregates", "./service/StockData.db");
     CROW_ROUTE(app, "/query").methods("POST"_method)
     ([&table](const crow::request& req) {
         auto body = crow::json::load(req.body);
