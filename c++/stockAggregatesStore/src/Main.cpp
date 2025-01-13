@@ -26,7 +26,7 @@ int main() {
         if (!body) {
             return crow::response(400, "Invalid JSON");
         }
-
+        
         optional<string> ticker;
         optional<pair<int, int>> timestampRange;
         optional<pair<float, float>> closeRange;

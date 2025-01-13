@@ -5,7 +5,7 @@
 #include <vector>
 
 using std::string;
-using std::stringstream;
+using std::ostringstream;
 using std::vector;
 
 SqlQueryBuilder::SqlQueryBuilder(const string& tableName, const vector<ColumnDef>& columns) {
@@ -19,7 +19,7 @@ SqlQueryBuilder& SqlQueryBuilder::whereClauses(const WhereClauses& whereClauses)
 }
 
 const string SqlQueryBuilder::build() const {
-    stringstream ss;
+    ostringstream ss;
     ss << "SELECT ";
 
     for (int i = 0; i < columns_.size() - 1; i++) {

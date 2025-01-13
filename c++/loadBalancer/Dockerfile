@@ -6,10 +6,8 @@ RUN apt update && apt install -y \
     build-essential \
     cmake \
     libasio-dev \
-    sqlite3 \
-    libsqlite3-dev \
     git && apt clean
-    
+
 RUN cd /usr/local/include && \
     git clone https://github.com/CrowCpp/Crow.git && \
     cd Crow && \
@@ -18,17 +16,25 @@ RUN cd /usr/local/include && \
     cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
     make install
 
+
+RUN cd /usr/local/include && \
+    git clone https://github.com/yhirose/cpp-httplib.git && \
+    cd cpp-httplib && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make install 
+
 WORKDIR /app
 
-COPY stockAggregatesStore /app/service
-COPY sqlUtils /app/sqlUtils
+COPY loadBalancer /app/service
 
 RUN cd service && \
-    mkdir -p build && \
+    mkdir -p build && \ 
     cd build && \
     cmake .. && \
     make
 
-EXPOSE 8080
+EXPOSE 8081
 
-CMD ["./service/build/stockAggregatesStore"]
+CMD ["./service/build/loadBalancer"]
