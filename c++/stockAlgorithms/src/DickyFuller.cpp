@@ -11,35 +11,34 @@ using Eigen::MatrixXf;
 
 namespace DickyFullerTest {
     
-    float WithTrendAndConstant(vector<float>& data) {
+    float WithTrendAndConstant(vector<float>& stockPrices) {
         // we need to a check to ensure that the data is of minimum size
-        Matrix<float, Dynamic, Dynamic> dataAsMatrix = Map<Matrix<float, Dynamic, Dynamic>>(data.data(), 1, data.size());
+        Matrix<float, Dynamic, Dynamic> dataAsMatrix = Map<Matrix<float, Dynamic, Dynamic>>(stockPrices.data(), 1, stockPrices.size());
 
-        MatrixXf derivative = dataAsMatrix.block(1, 2, 1, data.size() - 2) - dataAsMatrix.block(1, 1, 1, data.size() - 2);
-        MatrixXf constant = MatrixXf::Ones(1, data.size() - 2);
-        MatrixXf x = MatrixXf::LinSpaced(2, 100);
+        // MatrixXf derivative = dataAsMatrix.block(1, 2, 1, stockPrices.size() - 2) - dataAsMatrix.block(1, 1, 1, stockPrices.size() - 2);
+        // MatrixXf constant = MatrixXf::Ones(1, stockPrices.size() - 2);
+        // MatrixXf x = MatrixXf::LinSpaced(2, 100);
 
-        MatrixXf yLaggedOriginal = dataAsMatrix.block(1, 1, 1, data.size() - 1);
-        MatrixXf yLaggedOrder1 = dataAsMatrix.block(1, 1, 1, data.size() - 2) - dataAsMatrix.block(1, 0, 1, data.size() - 2);
+        // MatrixXf yLaggedOriginal = dataAsMatrix.block(1, 1, 1, stockPrices.size() - 1);
+        // MatrixXf yLaggedOrder1 = dataAsMatrix.block(1, 1, 1, stockPrices.size() - 2) - dataAsMatrix.block(1, 0, 1, stockPrices.size() - 2);
 
-        MatrixXf A(data.size() - 2, 4);
-        A << constant, x, yLaggedOriginal, yLaggedOrder1;
+        // MatrixXf A(stockPrices.size() - 2, 4);
+        // A << constant, x, yLaggedOriginal, yLaggedOrder1;
 
-        MatrixXf ATransposeA = A.transpose() * A;
-        MatrixXf ATransposeAInverse = ATransposeA.inverse();
+        // MatrixXf ATransposeA = A.transpose() * A;
+        // MatrixXf ATransposeAInverse = ATransposeA.inverse();
 
-        MatrixXf lambdas = (ATransposeAInverse * A.transpose()) * derivative;
+        // MatrixXf lambdas = (ATransposeAInverse * A.transpose()) * derivative;
 
-        MatrixXf yPredict = A * lambdas;
-        MatrixXf residuals = derivative - yPredict;
+        // MatrixXf yPredict = A * lambdas;
+        // MatrixXf residuals = derivative - yPredict;
         
-        float sigmaSquare = residuals.dot(residuals) / (data.size() - 2 - 4);
-        MatrixXf var_beta = sigmaSquare * ATransposeA.inverse();
-        MatrixXf std_errors = var_beta.diagonal().array().sqrt();
+        // float sigmaSquare = residuals.dot(residuals) / (stockPrices.size() - 2 - 4);
+        // MatrixXf var_beta = sigmaSquare * ATransposeA.inverse();
+        // MatrixXf std_errors = var_beta.diagonal().array().sqrt();
 
-        MatrixXf tstat = lambdas.array() / std_errors.array();
+        // MatrixXf tstat = lambdas.array() / std_errors.array();
 
-        return tstat[1, 1];
+        // return tstat[1, 1];
     }
-
 }
