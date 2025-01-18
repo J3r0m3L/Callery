@@ -1,6 +1,7 @@
 c++/sqlUtils/build
 c++/stockAggregatesStore/build
 c++/Crow
+javascript/node_modules
 python/populateDatabase/__pycache__
 python/populateDatabase/.env
 python/venv
