@@ -111,7 +111,7 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
     if ((errMsg = sqlite3_open_v2(directory_, &DB, SQLITE_OPEN_READONLY, NULL)) == SQLITE_OK) {
         sqlite3_prepare_v2(DB, builder.whereClauses(whereClauses).build().c_str(), -1, &stmt, NULL);
         while (sqlite3_step(stmt) == SQLITE_ROW) {
-            msgs.push_back(StockAggregatesTableMessage(
+            msgs.emplace_back(StockAggregatesTableMessage(
                 string((char*) sqlite3_column_text(stmt, 0)),
                 sqlite3_column_int(stmt, 1),
                 (float) sqlite3_column_double(stmt, 2),
@@ -122,6 +122,30 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
                 (float) sqlite3_column_double(stmt, 7),
                 (float) sqlite3_column_double(stmt, 8)
             ));
+        }
+        sqlite3_finalize(stmt);
+        sqlite3_close(DB);
+    } else {
+        CROW_LOG_WARNING << "Database Failed To Connect: " << errMsg;
+    }
+
+    return msgs;
+}
+
+vector<string> StockAggregatesTable::getStockTickers() {
+    vector<ColumnDef> columns = { this->TICKER };
+    SqlQueryBuilder builder = SqlQueryBuilder(this->tablename_, columns);
+
+    sqlite3* DB;
+    sqlite3_stmt* stmt;
+    int errMsg = 0;
+
+    vector<string> msgs = {};
+
+    if ((errMsg = sqlite3_open_v2(directory_, &DB, SQLITE_OPEN_READONLY, NULL)) == SQLITE_OK) {
+        sqlite3_prepare_v2(DB, builder.build().c_str(), -1, &stmt, NULL);
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+            msgs.emplace_back(string((char*) sqlite3_column_text(stmt, 0)));
         }
         sqlite3_finalize(stmt);
         sqlite3_close(DB);

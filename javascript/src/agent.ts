@@ -1,0 +1,31 @@
+const request = require('superagent');
+
+const baseURL = 'http//0.0.0.0:8081';
+
+export class BaseRequest {
+    service: string;
+
+    constructor(service: string) {
+        this.service = service;
+    }
+
+    get(url: string) {
+        return request.get(`${baseURL}/${this.service}/${url}`);
+    }
+
+    post(url: string, body: object) {
+        return request.post(`${baseURL}/${this.service}/${url}`).send(body).set('Content-Type', 'application/json');
+    }
+}
+
+export class StockAggregatesStore {
+    baseRequest: BaseRequest = new BaseRequest("stockAggregatesStore");
+
+    queryStockAggregatesTable(query: object) {
+        return this.baseRequest.post('query', query);
+    }
+
+    getTickers() {
+        return this.baseRequest.get('tickers');
+    }
+}

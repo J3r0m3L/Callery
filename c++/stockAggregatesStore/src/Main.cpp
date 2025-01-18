@@ -18,8 +18,8 @@ using std::vector;
 int main() {
 
     crow::SimpleApp app;
-
     StockAggregatesTable table = StockAggregatesTable("StockAggregates", "./service/StockData.db");
+
     CROW_ROUTE(app, "/query").methods("POST"_method)
     ([&table](const crow::request& req) {
         auto body = crow::json::load(req.body);
@@ -81,6 +81,17 @@ int main() {
         response["body"] = crow::json::wvalue::list(msgs.begin(), msgs.end());
         return crow::response(response);
     });
+
+
+    CROW_ROUTE(app, "/tickers").methods("GET"_method)
+    ([&table]() {
+        vector<string> msgs = table.getStockTickers();
+
+        crow::json::wvalue response; 
+        response["body"] = crow::json::wvalue::list(msgs.begin(), msgs.end());
+        return crow::response(response);
+    });
+
 
     app.port(8080).run();
 }

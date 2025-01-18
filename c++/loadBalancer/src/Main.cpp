@@ -28,7 +28,6 @@ int main() {
 
         ostringstream osJsonBody;
         osJsonBody << jsonBody;
-        CROW_LOG_WARNING << osJsonBody.str();
 
         auto response = client.Post("/query", osJsonBody.str(), "application/json");
 
@@ -39,6 +38,26 @@ int main() {
         osErr << response.error();
         return crow::response(osErr.str());
     });
+
+    CROW_ROUTE(app, "/stockAggregatesStore/tickers").methods("GET"_method)
+    ([&stockAggregateStores, &stockAggregatesStoreIndex]() {
+        string backendUrl = stockAggregateStores.at(stockAggregatesStoreIndex);
+        stockAggregatesStoreIndex = (stockAggregatesStoreIndex + 1) % stockAggregateStores.size();
+
+        httplib::Client client(backendUrl, 8080);
+
+        auto response = client.Get("/tickers");
+
+        if (response) {
+            return crow::response(response->body);
+        }
+        ostringstream osErr;
+        osErr << response.error();
+        return crow::response(osErr.str());
+    });
+
+
+
 
     vector<string> stockAlgorithms = {
         "172.20.0.3" // hard coded for now
@@ -55,7 +74,6 @@ int main() {
 
         ostringstream osJsonBody;
         osJsonBody << jsonBody;
-        CROW_LOG_WARNING << osJsonBody.str();
 
         auto response = client.Post("/dickyFuller", osJsonBody.str(), "application/json");
 

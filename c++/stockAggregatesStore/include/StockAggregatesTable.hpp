@@ -31,4 +31,5 @@ public:
     StockAggregatesTable(string tablename, char* directory);
     ~StockAggregatesTable();
     vector<StockAggregatesTableMessage> queryStockAggregatesTable(StockAggregatesTableQuery query);
+    vector<string> getStockTickers();
 };
