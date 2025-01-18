@@ -4,9 +4,8 @@
 
 using std::vector;
 
-namespace DickyFullerTest {
+namespace DickyFuller {
 
-    // for first implementation assuming lag order of 1 
-    float WithTrendAndConstant(vector<float>& stockPrices);
+    float testWithTrendAndConstant(vector<float>& stockPrices, int maxLag = 1);
 
 }

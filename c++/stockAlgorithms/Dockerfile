@@ -7,6 +7,7 @@ RUN apt update && apt install -y \
     cmake \
     libasio-dev \
     libeigen3-dev \
+    nlohmann-json3-dev \
     git && apt clean \
     && mv /usr/include/eigen3/Eigen /usr/local/include/Eigen
 
@@ -30,4 +31,5 @@ RUN cd service && \
 
 EXPOSE 8082
 
+RUN ./service/build/stockAlgorithmsTest
 CMD ["./service/build/stockAlgorithms"]

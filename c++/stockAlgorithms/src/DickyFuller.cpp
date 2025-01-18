@@ -1,4 +1,4 @@
-// #include "DickyFuller.hpp" vscode failing to detect the hpp file
+#include "DickyFuller.hpp"
 
 #include <Eigen/Dense>
 #include <vector>
@@ -9,11 +9,20 @@ using Eigen::Matrix;
 using Eigen::Map;
 using Eigen::MatrixXf;
 
-namespace DickyFullerTest {
-    
-    float WithTrendAndConstant(vector<float>& stockPrices) {
+
+float DickyFuller::testWithTrendAndConstant(vector<float>& stockPrices, int maxLag) {
+        
+        // if (stockPrices.size() <= (maxLag + 1)) {
+
+        // }
+
+
+
+
+
         // we need to a check to ensure that the data is of minimum size
         Matrix<float, Dynamic, Dynamic> dataAsMatrix = Map<Matrix<float, Dynamic, Dynamic>>(stockPrices.data(), 1, stockPrices.size());
+        return 0.0f;
 
         // MatrixXf derivative = dataAsMatrix.block(1, 2, 1, stockPrices.size() - 2) - dataAsMatrix.block(1, 1, 1, stockPrices.size() - 2);
         // MatrixXf constant = MatrixXf::Ones(1, stockPrices.size() - 2);
@@ -40,5 +49,4 @@ namespace DickyFullerTest {
         // MatrixXf tstat = lambdas.array() / std_errors.array();
 
         // return tstat[1, 1];
-    }
 }
