@@ -88,8 +88,9 @@ int main() {
         vector<string> msgs = table.getStockTickers();
 
         crow::json::wvalue response; 
-        response["body"] = crow::json::wvalue::list(msgs.begin(), msgs.end());
-        return crow::response(response);
+        // response["body"] = crow::json::wvalue::list(msgs.begin(), msgs.end());
+        return crow::response(crow::json::wvalue(crow::json::wvalue::list(msgs.begin(), msgs.end())));
+        // return crow::response(response);
     });
 
 

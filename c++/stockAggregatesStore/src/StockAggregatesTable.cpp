@@ -143,7 +143,7 @@ vector<string> StockAggregatesTable::getStockTickers() {
     vector<string> msgs = {};
 
     if ((errMsg = sqlite3_open_v2(directory_, &DB, SQLITE_OPEN_READONLY, NULL)) == SQLITE_OK) {
-        sqlite3_prepare_v2(DB, builder.build().c_str(), -1, &stmt, NULL);
+        sqlite3_prepare_v2(DB, builder.distinct().build().c_str(), -1, &stmt, NULL);
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             msgs.emplace_back(string((char*) sqlite3_column_text(stmt, 0)));
         }

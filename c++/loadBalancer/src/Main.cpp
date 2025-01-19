@@ -1,4 +1,5 @@
 #include <crow.h>
+#include <crow/middlewares/cors.h>
 #include <httplib.h>
 #include <sstream>
 #include <string>
@@ -9,7 +10,7 @@ using std::string;
 using std::vector;
 
 int main() {
-    crow::SimpleApp app;
+    crow::App<crow::CORSHandler> app;
 
     // todo: implement a reader as this interact across the docker network and the docker network is non-deterministic
     // consider moving boiler this to method or class
@@ -56,9 +57,6 @@ int main() {
         return crow::response(osErr.str());
     });
 
-
-
-
     vector<string> stockAlgorithms = {
         "172.20.0.3" // hard coded for now
     }; 
@@ -78,7 +76,11 @@ int main() {
         auto response = client.Post("/dickyFuller", osJsonBody.str(), "application/json");
 
         if (response) {
-            return crow::response(response->body);
+            auto body = crow::json::load(response->body);
+            return crow::response(crow::json::wvalue(crow::json::wvalue::list(body.begin(), body.end())));
+            // return crow::response(body); 
+            // return response;
+            // return crow::response(response->body);
         }
         ostringstream osErr;
         osErr << response.error();

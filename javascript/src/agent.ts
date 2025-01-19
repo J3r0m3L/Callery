@@ -1,8 +1,8 @@
 const request = require('superagent');
 
-const baseURL = 'http//0.0.0.0:8081';
+const baseURL = 'http://0.0.0.0:8081';
 
-export class BaseRequest {
+class BaseRequest {
     service: string;
 
     constructor(service: string) {
@@ -10,7 +10,8 @@ export class BaseRequest {
     }
 
     get(url: string) {
-        return request.get(`${baseURL}/${this.service}/${url}`);
+        return request.get(`${baseURL}/${this.service}/${url}`)
+        // .set("Access-Control-Allow-Origin", "*");
     }
 
     post(url: string, body: object) {
@@ -18,7 +19,7 @@ export class BaseRequest {
     }
 }
 
-export class StockAggregatesStore {
+class StockAggregatesStoreApi {
     baseRequest: BaseRequest = new BaseRequest("stockAggregatesStore");
 
     queryStockAggregatesTable(query: object) {
@@ -29,3 +30,5 @@ export class StockAggregatesStore {
         return this.baseRequest.get('tickers');
     }
 }
+
+export const StockAggregatesStore = new StockAggregatesStoreApi();

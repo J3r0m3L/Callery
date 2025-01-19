@@ -16,6 +16,7 @@
     "@babel/plugin-transform-runtime": "^7.25.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@mui/icons-material": "^6.4.0",
     "@mui/material": "^6.4.0",
     "globals": "^15.14.0",
     "react": "^19.0.0",
