@@ -4,6 +4,9 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
     build-essential \
+    autoconf \
+    libtool \
+    pkg-config \
     cmake \
     libasio-dev \
     sqlite3 \
@@ -16,6 +19,14 @@ RUN cd /usr/local/include && \
     mkdir build && \
     cd build && \
     cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
+    make install
+
+RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+    cd grpc && \
+    mkdir cmake/build && \
+    cd cmake/build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../.. && \
+    make -j 4 && \
     make install
 
 WORKDIR /app

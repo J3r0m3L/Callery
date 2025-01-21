@@ -1,12 +1,12 @@
 #include "StockAggregatesTableQuery.hpp"
 
+#include <optional>
 #include <string>
 #include <utility>
-#include <optional>
 
-using std::string;
-using std::pair;
 using std::optional;
+using std::pair;
+using std::string;
 
 StockAggregatesTableQuery::StockAggregatesTableQuery(
     const optional<string> ticker,

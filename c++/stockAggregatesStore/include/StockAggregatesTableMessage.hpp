@@ -1,6 +1,5 @@
 #pragma once
 
-#include <crow.h>
 #include <string>
 
 using std::string;
@@ -39,6 +38,4 @@ public:
     const float getOpen() const;
     const float getVolume() const;
     const float getVwap() const;
-
-    operator crow::json::wvalue() const;
 };

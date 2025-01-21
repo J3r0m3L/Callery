@@ -1,6 +1,5 @@
 #include "StockAggregatesTableMessage.hpp"
 
-#include <crow.h>
 #include <string>
 
 using std::string;
@@ -61,18 +60,4 @@ const float StockAggregatesTableMessage::getVolume() const {
 
 const float StockAggregatesTableMessage::getVwap() const {
     return this->vwap;
-}
-
-StockAggregatesTableMessage::operator crow::json::wvalue() const {
-    crow::json::wvalue obj;
-    obj["ticker"] = this->getTicker();
-    obj["timestamp"] = to_string(this->getTimestamp());
-    obj["close"] = this->getClose();
-    obj["high"] = this->getHigh();
-    obj["low"] = this->getLow();
-    obj["transactions"] = this->getTransactions();
-    obj["open"] = this->getOpen();
-    obj["volume"] = this->getVolume();
-    obj["vwap"] = this->getVwap();
-    return obj;
 }
