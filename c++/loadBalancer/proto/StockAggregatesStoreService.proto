@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package SasPkg;
+
+message SasTableMsgs {
+  repeated SasTableMsg msgs = 1;
+};
+
+message SasTableMsg {
+  string ticker = 1;
+  int64 timestamp = 2;
+  float close = 3;
+  float high = 4; 
+  float low = 5;
+  float transactions = 6;
+  float open = 7;
+  float volume = 8; 
+  float vwap = 9;
+}
+
+message SasTableQuery {
+  optional string ticker = 1;
+  repeated int64 timestampRange = 2 [packed = true];
+  repeated float closeRange = 3 [packed = true];
+  repeated float highRange = 4 [packed=true];
+  repeated float lowRange = 5 [packed=true];
+  repeated float transactionsRange = 6 [packed=true];
+  repeated float openRange = 7 [packed=true];
+  repeated float volumeRange = 8 [packed=true];
+  repeated float vwapRange = 9 [packed=true];
+}
+
+message SasTickers {
+  repeated string tickers = 1;
+}
+
+service StockAggregatesStoreService {
+  rpc queryStockAggregatesTable(SasTableQuery) returns (SasTableMsgs) {};
+  rpc getStockTickers(google.protobuf.Empty) returns (SasTickers) {};
+}
