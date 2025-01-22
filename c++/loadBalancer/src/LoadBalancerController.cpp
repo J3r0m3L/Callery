@@ -107,10 +107,12 @@ int main() {
         if (status.ok()) {
             string json_string;
             static_cast<void>(google::protobuf::util::MessageToJsonString(response, &json_string));
-            return crow::response(json_string);
+            crow::response res(json_string);
+            res.set_header("Content-Type", "application/json");
+            return res;
         }
 
-        return crow::response("Error running queryStockAggregatesTable");
+        return crow::response(500, "Error running queryStockAggregatesTable");
     });
 
     CROW_ROUTE(app, "/stockAggregatesStore/tickers").methods("GET"_method)
@@ -129,10 +131,12 @@ int main() {
         if (status.ok()) {
             string json_string;
             static_cast<void>(google::protobuf::util::MessageToJsonString(response, &json_string));
-            return crow::response(json_string);
+            crow::response res(json_string);
+            res.set_header("Content-Type", "application/json");
+            return res;
         }
 
-        return crow::response("Error running getStockTickers");
+        return crow::response(500, "Error running getStockTickers");
     });
 
     vector<string> stockAlgorithms = {
@@ -156,10 +160,12 @@ int main() {
         if (status.ok()) {
             string json_string;
             static_cast<void>(google::protobuf::util::MessageToJsonString(response, &json_string));
-            return crow::response(json_string);
+            crow::response res(json_string);
+            res.set_header("Content-Type", "application/json");
+            return res;
         }
 
-        return crow::response("Error running dickuFullerTest");
+        return crow::response(500, "Error running dickyFullerTest");
     });
 
     app.port(8081).run();
