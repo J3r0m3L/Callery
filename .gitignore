@@ -1,6 +1,7 @@
 c++/loadBalancer/build
 c++/sqlUtils/build
 c++/stockAggregatesStore/build
+c++/stockAlgorithms/build
 javascript/node_modules
 python/populateDatabase/__pycache__
 python/populateDatabase/.env

@@ -16,14 +16,13 @@ RUN cd /usr/local/include && \
     cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
     make install
 
-
-RUN cd /usr/local/include && \
-    git clone https://github.com/yhirose/cpp-httplib.git && \
-    cd cpp-httplib && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make install 
+RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+    cd grpc && \
+    mkdir cmake/build && \
+    cd cmake/build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../.. && \
+    make -j 4 && \
+    make install
 
 WORKDIR /app
 

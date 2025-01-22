@@ -1,5 +1,7 @@
-#include "proto/StockAggregatesStoreService.grpc.pb.cc"
+#include "proto/StockAggregatesStoreService.grpc.pb.h"
 #include "proto/StockAggregatesStoreService.pb.h"
+#include "proto/StockAlgorithmsService.grpc.pb.h"
+#include "proto/StockAlgorithmsService.pb.h"
 
 #include <crow.h>
 #include <crow/middlewares/cors.h>
@@ -19,6 +21,9 @@ using SasPkg::SasTableQuery;
 using SasPkg::SasTableMsgs;
 using SasPkg::SasTickers;
 using SasPkg::StockAggregatesStoreService;
+using SaPkg::SaDickyFullerRequest;
+using SaPkg::SaDickyFullerResponse;
+using SaPkg::StockAlgorithmsService;
 using std::make_pair;
 using std::optional;
 using std::ostringstream;
@@ -135,30 +140,27 @@ int main() {
     }; 
     int stockAlgorithmsIndex = 0;
 
-    // CROW_ROUTE(app, "/stockAlgorithms/dickyFuller").methods("POST"_method)
-    // ([&stockAlgorithms, &stockAlgorithmsIndex](const crow::request& req) {
-    //     string backendUrl = stockAlgorithms.at(stockAlgorithmsIndex);
-    //     stockAlgorithmsIndex = (stockAlgorithmsIndex + 1) % stockAlgorithms.size();
+    CROW_ROUTE(app, "/stockAlgorithms/dickyFuller").methods("POST"_method)
+    ([&stockAlgorithms, &stockAlgorithmsIndex](const crow::request& req) {
+        string backendUrl = stockAlgorithms.at(stockAlgorithmsIndex);
+        stockAlgorithmsIndex = (stockAlgorithmsIndex + 1) % stockAlgorithms.size();
 
-    //     httplib::Client client(backendUrl, 8082);
-    //     auto jsonBody = crow::json::load(req.body);
+        ClientContext context;
+        SaDickyFullerRequest request;
+        SaDickyFullerResponse response;
 
-    //     ostringstream osJsonBody;
-    //     osJsonBody << jsonBody;
+        shared_ptr<Channel> channel = grpc::CreateChannel(backendUrl + ":8082", grpc::InsecureChannelCredentials());
+        StockAlgorithmsService::Stub stub(channel);
 
-    //     auto response = client.Post("/dickyFuller", osJsonBody.str(), "application/json");
+        Status status = stub.dickyFullerTest(&context, request, &response);
+        if (status.ok()) {
+            string json_string;
+            static_cast<void>(google::protobuf::util::MessageToJsonString(response, &json_string));
+            return crow::response(json_string);
+        }
 
-    //     if (response) {
-    //         auto body = crow::json::load(response->body);
-    //         return crow::response(crow::json::wvalue(crow::json::wvalue::list(body.begin(), body.end())));
-    //         // return crow::response(body); 
-    //         // return response;
-    //         // return crow::response(response->body);
-    //     }
-    //     ostringstream osErr;
-    //     osErr << response.error();
-    //     return crow::response(osErr.str());
-    // });
+        return crow::response("Error running dickuFullerTest");
+    });
 
     app.port(8081).run();
 }

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package SaPkg;
+
+message SaDickyFullerRequest {
+  repeated float stockPrices = 1 [packed = true];
+}
+
+message SaDickyFullerResponse {
+  float tStat = 1;
+}
+
+service StockAlgorithmsService {
+  rpc dickyFullerTest(SaDickyFullerRequest) returns (SaDickyFullerResponse) {};
+}

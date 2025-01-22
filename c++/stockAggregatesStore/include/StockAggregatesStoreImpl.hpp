@@ -1,3 +1,5 @@
+#pragma once
+
 #include "proto/StockAggregatesStoreService.grpc.pb.h"
 #include "proto/StockAggregatesStoreService.pb.h"
 #include "StockAggregatesTable.hpp"

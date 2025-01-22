@@ -8,12 +8,13 @@ project(LoadBalancer)
 find_package(Protobuf CONFIG REQUIRED)
 find_package(gRPC CONFIG REQUIRED)
 
-add_library(sasProtolib "${CMAKE_CURRENT_SOURCE_DIR}/proto/StockAggregatesStoreService.proto")
-target_link_libraries(sasProtolib gRPC::grpc++)
-target_include_directories(sasProtolib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
-protobuf_generate(TARGET sasProtolib LANGUAGE cpp)
+file(GLOB PROTO_FILES "${CMAKE_CURRENT_SOURCE_DIR}/proto/*.proto")
+add_library(protolib ${PROTO_FILES})
+target_link_libraries(protolib gRPC::grpc++)
+target_include_directories(protolib PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+protobuf_generate(TARGET protolib LANGUAGE cpp)
 
-protobuf_generate(TARGET sasProtolib LANGUAGE grpc 
+protobuf_generate(TARGET protolib LANGUAGE grpc 
 GENERATE_EXTENSIONS .grpc.pb.h .grpc.pb.cc
 PLUGIN "protoc-gen-grpc=/usr/local/bin/grpc_cpp_plugin")
 
@@ -24,4 +25,4 @@ include_directories("/usr/include")
 file(GLOB SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp")
 add_executable(loadBalancer ${SOURCES})
 
-target_link_libraries(loadBalancer sasProtolib)
+target_link_libraries(loadBalancer protolib)

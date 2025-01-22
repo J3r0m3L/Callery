@@ -11,12 +11,12 @@ RUN apt update && apt install -y \
     git && apt clean \
     && mv /usr/include/eigen3/Eigen /usr/local/include/Eigen
 
-RUN cd /usr/local/include && \
-    git clone https://github.com/CrowCpp/Crow.git && \
-    cd Crow && \
-    mkdir build && \
-    cd build && \
-    cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
+RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+    cd grpc && \
+    mkdir cmake/build && \
+    cd cmake/build && \
+    cmake -DCMAKE_INSTALL_PREFIX=/usr/local ../.. && \
+    make -j 4 && \
     make install
 
 WORKDIR /app
