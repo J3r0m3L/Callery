@@ -2,51 +2,50 @@
 
 #include <Eigen/Dense>
 #include <vector>
+#include <iostream>
 
 using std::vector;
 using Eigen::Dynamic;
-using Eigen::Matrix;
 using Eigen::Map;
 using Eigen::MatrixXf;
-
+using Eigen::VectorXf;
 
 float DickyFuller::testWithTrendAndConstant(vector<float>& stockPrices, int maxLag) {
         
-        // if (stockPrices.size() <= (maxLag + 1)) {
-
-        // }
-
-
-
-
-
-        // we need to a check to ensure that the data is of minimum size
-        Matrix<float, Dynamic, Dynamic> dataAsMatrix = Map<Matrix<float, Dynamic, Dynamic>>(stockPrices.data(), 1, stockPrices.size());
+    // for now just assuming maxLag = 1
+    if (stockPrices.size() <= (maxLag + 1)) {
         return 0.0f;
+    }
+ 
+    int size = stockPrices.size();
+    int sizeSub2 = stockPrices.size() - 2;
 
-        // MatrixXf derivative = dataAsMatrix.block(1, 2, 1, stockPrices.size() - 2) - dataAsMatrix.block(1, 1, 1, stockPrices.size() - 2);
-        // MatrixXf constant = MatrixXf::Ones(1, stockPrices.size() - 2);
-        // MatrixXf x = MatrixXf::LinSpaced(2, 100);
+    VectorXf stockPricesAsVector = Map<VectorXf>(stockPrices.data(), size);
+    VectorXf derivative = stockPricesAsVector.segment(2, sizeSub2).eval() - stockPricesAsVector.segment(1, sizeSub2).eval();
+    VectorXf constant(sizeSub2);
+    constant.setOnes();
+    VectorXf x(sizeSub2);
+    for (int i = 2; i < size; i++) {
+        x(i - 2) = i;
+    }
 
-        // MatrixXf yLaggedOriginal = dataAsMatrix.block(1, 1, 1, stockPrices.size() - 1);
-        // MatrixXf yLaggedOrder1 = dataAsMatrix.block(1, 1, 1, stockPrices.size() - 2) - dataAsMatrix.block(1, 0, 1, stockPrices.size() - 2);
+    VectorXf yLaggedOriginal = stockPricesAsVector.segment(1, sizeSub2).eval();
+    VectorXf yLaggedOrder1 = stockPricesAsVector.segment(1, sizeSub2).eval() - stockPricesAsVector.segment(0, sizeSub2).eval();
 
-        // MatrixXf A(stockPrices.size() - 2, 4);
-        // A << constant, x, yLaggedOriginal, yLaggedOrder1;
+    MatrixXf A(sizeSub2, 4);
+    A << constant, x, yLaggedOriginal, yLaggedOrder1;
+    MatrixXf A_transpose_A = A.transpose() * A;
+    MatrixXf A_transpose_A_inverse = A_transpose_A.inverse();
+    VectorXf lambdas = ((A_transpose_A_inverse * A.transpose()) * derivative).col(0);
 
-        // MatrixXf ATransposeA = A.transpose() * A;
-        // MatrixXf ATransposeAInverse = ATransposeA.inverse();
+    VectorXf y_predict = (A * lambdas).col(0);
+    VectorXf residuals  = derivative - y_predict;
+    float sigma_square = residuals.dot(residuals) / (sizeSub2 - 4);
 
-        // MatrixXf lambdas = (ATransposeAInverse * A.transpose()) * derivative;
+    MatrixXf var_beta = sigma_square * A_transpose_A_inverse;
+    VectorXf std_errors = var_beta.diagonal().array().sqrt();
 
-        // MatrixXf yPredict = A * lambdas;
-        // MatrixXf residuals = derivative - yPredict;
-        
-        // float sigmaSquare = residuals.dot(residuals) / (stockPrices.size() - 2 - 4);
-        // MatrixXf var_beta = sigmaSquare * ATransposeA.inverse();
-        // MatrixXf std_errors = var_beta.diagonal().array().sqrt();
+    VectorXf result = lambdas.array() / std_errors.array();
 
-        // MatrixXf tstat = lambdas.array() / std_errors.array();
-
-        // return tstat[1, 1];
+    return result(2);
 }

@@ -1,5 +1,6 @@
 #include "DickyFuller.hpp"
 
+#include <cmath>
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -7,8 +8,14 @@
 #include <vector>
 
 using nlohmann::json;
+using std::abs;
 using std::ifstream;
 using std::vector;
+
+
+bool isClose(float number1, float number2, float epsilon = 1e-3) {
+    return abs(number1 - number2) < epsilon;
+}
 
 int main() {
     ifstream file("./service/test/testCases/dickyFullerTest.json");
@@ -29,9 +36,5 @@ int main() {
         maxLag = jsonData["maxLag"].get<int>();
     }
 
-
-    vector<float> stockPrices2 = {0, 0, 0};
-
-    // todo replace with actual testing framework
-    // assert(DickyFuller::testWithTrendAndConstant(stockPrices2, maxLag) == tStat);
+    assert(isClose(DickyFuller::testWithTrendAndConstant(stockPrices, maxLag), tStat));
 }
