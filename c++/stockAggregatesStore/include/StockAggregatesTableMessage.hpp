@@ -7,7 +7,7 @@ using std::string;
 class StockAggregatesTableMessage {
 private:
     const string ticker;
-    const int timestamp;
+    const long long timestamp;
     const float close;
     const float high; 
     const float low;
@@ -19,7 +19,7 @@ private:
 public:
     StockAggregatesTableMessage(
         const string& ticker,
-        int timestamp,
+        long long timestamp,
         float close,
         float high,
         float low,
@@ -30,7 +30,7 @@ public:
     );
 
     const string& getTicker() const;
-    const int getTimestamp() const;
+    const long long getTimestamp() const;
     const float getClose() const;
     const float getHigh() const;
     const float getLow() const;

@@ -113,7 +113,7 @@ vector<StockAggregatesTableMessage> StockAggregatesTable::queryStockAggregatesTa
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             msgs.emplace_back(StockAggregatesTableMessage(
                 string((char*) sqlite3_column_text(stmt, 0)),
-                sqlite3_column_int(stmt, 1),
+                sqlite3_column_int64(stmt, 1),
                 (float) sqlite3_column_double(stmt, 2),
                 (float) sqlite3_column_double(stmt, 3),
                 (float) sqlite3_column_double(stmt, 4),

@@ -11,7 +11,7 @@ using std::string;
 class StockAggregatesTableQuery {
 private:
     const optional<string> ticker;
-    const optional<pair<int, int>> timestampRange;
+    const optional<pair<long long, long long>> timestampRange;
     const optional<pair<float, float>> closeRange;
     const optional<pair<float, float>> highRange;
     const optional<pair<float, float>> lowRange;
@@ -23,7 +23,7 @@ private:
 public:
     StockAggregatesTableQuery(
         const optional<string> ticker,
-        const optional<pair<int, int>> timestampRange,
+        const optional<pair<long long, long long>> timestampRange,
         const optional<pair<float, float>> closeRange,
         const optional<pair<float, float>> highRange,
         const optional<pair<float, float>> lowRange,
@@ -34,7 +34,7 @@ public:
     );
 
     const optional<string>& getTicker() const;
-    const optional<pair<int, int>>& getTimestampRange() const;
+    const optional<pair<long long, long long>>& getTimestampRange() const;
     const optional<pair<float, float>>& getCloseRange() const;
     const optional<pair<float, float>>& getHighRange() const;
     const optional<pair<float, float>>& getLowRange() const;

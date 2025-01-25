@@ -28,6 +28,7 @@ using std::make_pair;
 using std::optional;
 using std::ostringstream;
 using std::pair;
+using std::stoll;
 using std::string;
 using std::shared_ptr;
 using std::vector;
@@ -61,7 +62,7 @@ int main() {
         }
         if (body.has("timestampRange") && body["timestampRange"].t() == crow::json::type::List) {
             for (auto& it : body["timestampRange"]) {
-                request.add_timestamprange(it.i());
+                request.add_timestamprange(stoll(it.s()));
             }
         }
         if (body.has("closeRange") && body["closeRange"].t() == crow::json::type::List) {

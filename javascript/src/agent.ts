@@ -20,7 +20,7 @@ class BaseRequest {
 }
 
 class StockAggregatesStoreApi {
-    baseRequest: BaseRequest = new BaseRequest("stockAggregatesStore");
+    private baseRequest: BaseRequest = new BaseRequest("stockAggregatesStore");
 
     queryStockAggregatesTable(query: object) {
         return this.baseRequest.post('query', query);

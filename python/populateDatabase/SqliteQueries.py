@@ -10,7 +10,7 @@ class SqliteQueries:
             CREATE TABLE IF NOT EXISTS {table_name} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 ticker CHAR(4) NOT NULL CHECK(length(ticker) <= 4),
-                timestamp INT NOT NULL,
+                timestamp LONG NOT NULL,
                 close FLOAT NOT NULL,
                 high FLOAT NOT NULL,
                 low FLOAT NOT NULL,

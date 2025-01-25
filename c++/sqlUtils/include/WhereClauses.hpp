@@ -27,6 +27,7 @@ private:
         bool stringMatch = type == ColumnDefTypes::StringDef && is_same<T, string>::value;
         bool floatMatch = type == ColumnDefTypes::FloatDef && is_same<T, float>::value;
         bool intMatch = type == ColumnDefTypes::IntegerDef && is_same<T, int>::value;
+        bool longMatch = type == ColumnDefTypes::LongDef && is_same<T, long long>::value;
 
         if (!stringMatch && !floatMatch && !intMatch) {
             throw runtime_error("Value Type does not match Column Type");

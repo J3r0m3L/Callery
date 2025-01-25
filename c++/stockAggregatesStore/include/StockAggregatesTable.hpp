@@ -18,7 +18,7 @@ private:
     string tablename_;
     char* directory_;
     ColumnDef TICKER = ColumnDef("ticker", ColumnDefTypes::StringDef);
-    ColumnDef TIMESTAMP = ColumnDef("timestamp", ColumnDefTypes::IntegerDef);
+    ColumnDef TIMESTAMP = ColumnDef("timestamp", ColumnDefTypes::LongDef);
     ColumnDef CLOSE = ColumnDef("close", ColumnDefTypes::FloatDef);
     ColumnDef HIGH = ColumnDef("high", ColumnDefTypes::FloatDef);
     ColumnDef LOW = ColumnDef("low", ColumnDefTypes::FloatDef);

@@ -27,7 +27,7 @@ export default function TickerSelector({ setSelectedTickers }: TickerSelectorPro
       setFiltrate([...tickers]);
     }
     const tmpFiltrate = [...tickers];
-    setFiltrate(tmpFiltrate.filter((ticker: string) => (ticker.includes(search))));
+    setFiltrate(tmpFiltrate.filter((ticker: string) => (ticker.toLowerCase().includes(search.toLowerCase()))));
   }, [search, tickers])
 
   const addTicker = (ticker: string) => {
@@ -41,9 +41,8 @@ export default function TickerSelector({ setSelectedTickers }: TickerSelectorPro
     // for now only two tickers at a time
     if (tmpChosenTickers.length > 2) tmpChosenTickers.shift();
     setChosenTickers(tmpChosenTickers);
-
     if (!setSelectedTickers) return;
-    setSelectedTickers(chosenTickers);
+    setSelectedTickers(tmpChosenTickers);
   };
 
   const tickersList = filtrate.map((ticker, i) => (

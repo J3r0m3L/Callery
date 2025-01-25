@@ -10,7 +10,7 @@ using std::string;
 
 StockAggregatesTableQuery::StockAggregatesTableQuery(
     const optional<string> ticker,
-    const optional<pair<int, int>> timestampRange,
+    const optional<pair<long long, long long>> timestampRange,
     const optional<pair<float, float>> closeRange,
     const optional<pair<float, float>> highRange,
     const optional<pair<float, float>> lowRange,
@@ -33,7 +33,7 @@ const optional<string>& StockAggregatesTableQuery::getTicker() const {
     return this->ticker;
 };
 
-const optional<pair<int, int>>& StockAggregatesTableQuery::getTimestampRange() const {
+const optional<pair<long long, long long>>& StockAggregatesTableQuery::getTimestampRange() const {
     return this->timestampRange;
 };
 

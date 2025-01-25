@@ -7,7 +7,7 @@ using std::to_string;
 
 StockAggregatesTableMessage::StockAggregatesTableMessage (
     const string& ticker,
-    int timestamp,
+    long long timestamp,
     float close,
     float high,
     float low,
@@ -30,7 +30,7 @@ const string& StockAggregatesTableMessage::getTicker() const {
     return this->ticker;
 }
 
-const int StockAggregatesTableMessage::getTimestamp() const {
+const long long StockAggregatesTableMessage::getTimestamp() const {
     return this->timestamp;
 }
 

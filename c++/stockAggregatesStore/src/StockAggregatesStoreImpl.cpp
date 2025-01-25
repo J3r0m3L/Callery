@@ -22,7 +22,7 @@ using std::vector;
 
 Status StockAggregatesStoreImpl::queryStockAggregatesTable(ServerContext* context, const SasTableQuery* request, SasTableMsgs* response) {
   optional<string> ticker;
-  optional<pair<int, int>> timestampRange;
+  optional<pair<long long, long long>> timestampRange;
   optional<pair<float, float>> closeRange;
   optional<pair<float, float>> highRange;
   optional<pair<float, float>> lowRange;
@@ -71,7 +71,9 @@ Status StockAggregatesStoreImpl::queryStockAggregatesTable(ServerContext* contex
     vwapRange 
   ));
 
-  for (auto& msg : msgs) {
+  // transfering too much data (stock prices every minute) for default protobuf size so changing to hourly for now
+  for (int i = 0; i < msgs.size(); i+=60) {
+    auto& msg = msgs.at(i);
     auto* data = response->mutable_msgs()->Add();
     data->set_ticker(msg.getTicker());
     data->set_timestamp(msg.getTimestamp());
@@ -81,9 +83,9 @@ Status StockAggregatesStoreImpl::queryStockAggregatesTable(ServerContext* contex
     data->set_transactions(msg.getTransactions());
     data->set_open(msg.getOpen());
     data->set_volume(msg.getVolume());
-    data->set_vwap(msg.getVwap());  
+    data->set_vwap(msg.getVwap()); 
   }
-        
+  
   return Status::OK;
 }
 

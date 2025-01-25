@@ -11,7 +11,8 @@ using Eigen::MatrixXf;
 using Eigen::VectorXf;
 
 float DickyFuller::testWithTrendAndConstant(vector<float>& stockPrices, int maxLag) {
-        
+    // https://faculty.washington.edu/ezivot/econ584/notes/unitrootLecture2.pdf 
+    // https://people.ucsc.edu/~cheung/pubs/with_Lai/LagOrderAugDickey_Fuller.pdf?utm_source=chatgpt.com
     // for now just assuming maxLag = 1
     if (stockPrices.size() <= (maxLag + 1)) {
         return 0.0f;
