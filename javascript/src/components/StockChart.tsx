@@ -28,26 +28,26 @@ export default function StockChart({ tickers }: StockChartProps) {
         const orderedTimestamps: string[] = Array.from(timestamps);
         orderedTimestamps.sort((a: string, b: string) => a.localeCompare(b));
 
-
-
-        setStockPrices(orderedTimestamps.map((ts) => ({
-          date: new Date(parseInt(ts, 10)), // timestamp is incorrect
-          ticker1: timestampToTicker[0].has(ts) ? timestampToTicker[0].get(ts) : null,
-          ticker2: timestampToTicker[1].has(ts) ? timestampToTicker[1].get(ts) : null,
-        })));
+        setStockPrices(orderedTimestamps.map((ts) => {
+          const date = new Date(parseInt(ts, 10));
+          const dataPoint: any = {
+            date: `${date.getMonth()}/${date.getDate()}/${date.getFullYear()}`,
+          };
+          if (tickers.length >= 1) dataPoint[tickers[0]] = timestampToTicker[0].has(ts) ? timestampToTicker[0].get(ts) : null;
+          if (tickers.length >= 2) dataPoint[tickers[1]] = timestampToTicker[1].has(ts) ? timestampToTicker[1].get(ts) : null;
+          return dataPoint;
+        }));
       });
   }, [tickers]);
-
-  console.log('stockPrices', stockPrices);
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={Array.from(stockPrices) }>
         <XAxis dataKey="date" />
         <YAxis />
-        <Legend />
-        <Line type="monotone" dataKey="ticker1" stroke="#fdd835" dot={false} />
-        <Line type="monotone" dataKey="ticker2" stroke="#26c6da" dot={false} />
+        { tickers.length >= 1 ? <Legend /> : null }
+        <Line type="monotone" dataKey={tickers[0]} stroke="#fdd835" dot={false} />
+        <Line type="monotone" dataKey={tickers[1]} stroke="#26c6da" dot={false} />
       </LineChart>
     </ResponsiveContainer>
   );

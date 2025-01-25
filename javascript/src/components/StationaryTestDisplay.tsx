@@ -24,14 +24,13 @@ export default function StationaryTestDisplay({ tickers }: StationaryTestDisplay
       });
   }, [tickers]);
 
-  console.log('tStats', tStats);
-
+  if (!tickers.length) return null;
   return (
     <div>
-      <Typography>Augmented Dicky Fuller Test Statistics</Typography>
+      <Typography variant="h6">Augmented Dicky Fuller Test Statistics:</Typography>
       {
         tStats.map((tStat, i) => (
-          <Typography key={i}>{`${tickers[i]}: ${tStat}`}</Typography>
+          <Typography key={i}>{`${tickers[i]}:${tStat}`}</Typography>
         ))
       }
     </div>

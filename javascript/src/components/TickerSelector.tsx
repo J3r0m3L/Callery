@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, List, ListItemButton, ListItemText } from '@mui/material';
+import { TextField, List, ListItemButton, ListItemText, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 import { StockAggregatesStore } from '../agent';
 
 type TickerSelectorProps = {
@@ -60,7 +61,16 @@ export default function TickerSelector({ setSelectedTickers }: TickerSelectorPro
       <TextField 
         onChange={(e) => setSearch(e.target.value)}
         value={search}
-        variant="standard" 
+        variant="standard"
+        slotProps = {{
+          input: {
+            startAdornment: (
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            )
+          }
+        }}
       />
       <List
         sx={{ 
