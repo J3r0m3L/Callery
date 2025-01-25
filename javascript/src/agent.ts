@@ -11,7 +11,6 @@ class BaseRequest {
 
     get(url: string) {
         return request.get(`${baseURL}/${this.service}/${url}`)
-        // .set("Access-Control-Allow-Origin", "*");
     }
 
     post(url: string, body: object) {
@@ -31,4 +30,13 @@ class StockAggregatesStoreApi {
     }
 }
 
+class StockAlgorithmsApi {
+    private baseRequest: BaseRequest = new BaseRequest("stockAlgorithms");
+
+    performDickyFullerTest(stockPrices: number[], maxLag: number) {
+        return this.baseRequest.post('dickyFuller', { stockPrices, maxLag });
+    }
+}
+
 export const StockAggregatesStore = new StockAggregatesStoreApi();
+export const StockAlgorithms = new StockAlgorithmsApi();

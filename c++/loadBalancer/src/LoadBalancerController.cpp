@@ -150,10 +150,21 @@ int main() {
         string backendUrl = stockAlgorithms.at(stockAlgorithmsIndex);
         stockAlgorithmsIndex = (stockAlgorithmsIndex + 1) % stockAlgorithms.size();
 
+        // todo: add lag parameter, for now defaults to 1
+        auto body = crow::json::load(req.body);
+        bool hasStockPrices = body.has("stockPrices") && body["stockPrices"].t() == crow::json::type::List;
+
+        if (!body || !hasStockPrices) {
+            return crow::response(400, "Invalid JSON");
+        }
+
         ClientContext context;
         SaDickyFullerRequest request;
         SaDickyFullerResponse response;
-
+        for (auto& it: body["stockPrices"]) {
+            request.add_stockprices(it.d());
+        }
+        
         shared_ptr<Channel> channel = grpc::CreateChannel(backendUrl + ":8082", grpc::InsecureChannelCredentials());
         StockAlgorithmsService::Stub stub(channel);
 

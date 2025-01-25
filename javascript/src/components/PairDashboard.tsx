@@ -5,14 +5,11 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import AppleIcon from '@mui/icons-material/Apple';
 import TickerSelector from './TickerSelector';
 import StockChart from './StockChart';
-
+import StationaryTestDisplay from './StationaryTestDisplay';
 
 export default function PairDashboard() {
   const theme = useTheme();
   const [selectedTickers, setSelectedTickers] = useState<string[]>([]);
-
-
-  console.log('selectedTickers', selectedTickers);
 
   return (
     <div>
@@ -38,6 +35,9 @@ export default function PairDashboard() {
       </Drawer>
       <div style={{ marginLeft: '200px', marginTop: '50px' }}>
         <StockChart tickers={selectedTickers} /> 
+      </div>
+      <div style={{ marginLeft: '200px'}}>
+        <StationaryTestDisplay tickers={selectedTickers} />
       </div>
     </div>
   );
