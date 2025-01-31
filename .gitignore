@@ -3,6 +3,7 @@ c++/sqlUtils/build
 c++/stockAggregatesStore/build
 c++/stockAlgorithms/build
 javascript/node_modules
+javascript/build
 python/populateDatabase/__pycache__
 python/populateDatabase/.env
 python/venv
