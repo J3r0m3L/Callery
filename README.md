@@ -44,22 +44,19 @@ python3 StoreStockData.py
 mv StockData.db ../c++/stockAggregatesStore
 ```
 ### Start Services
-Ensure you have Docker installed. In the base directory:
-Start the Stock Aggregates Store service.
+Ensure you have Docker installed. In the base directory, start the Stock Aggregates Store service.
 ```bash
 ./run-callery.sh sas-only
 ```
-In a new terminal:
-Start the Stock Algorithms service.
+In a new terminal tab, start the Stock Algorithms service.
 ```bash
 ./run-callery.sh sa-only
 ```
-In a new terminal:
-Start the Load Balancer service.
+In a new terminal tab, start the Load Balancer service.
 ```bash
 ./run-callery.sh lb-only
 ```
-Start the Frontend service.
+In a new terminal tab, start the Frontend service.
 ```bash
 cd javascript
 npm ci
