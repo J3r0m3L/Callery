@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StockAggregatesStore, StockAlgorithms } from '../agent';
+import { StockAlgorithms } from '../agent';
 import { Typography } from '@mui/material';
 
 
@@ -11,16 +11,13 @@ export default function StationaryTestDisplay({ tickers }: StationaryTestDisplay
   const [tStats, setTStats] = useState<Number[]>([]);
 
   useEffect(() => {
-    Promise.all(tickers.map((ticker) => StockAggregatesStore.queryStockAggregatesTable({ ticker })))
-      .then((stockPrices) => {
-        Promise.all(stockPrices.map((sp) => StockAlgorithms.performDickyFullerTest(sp?.body?.msgs.map((msg: any) => msg.high), 1)))
-          .then((responses) => {
-            const tmpTStats: Number[] = [];
-            responses.forEach((response) => {
-              tmpTStats.push(response?.body?.tStat);
-            });
-            setTStats(tmpTStats);
-          });
+    Promise.all(tickers.map((ticker) => StockAlgorithms.performDickyFullerTest(ticker, 1)))
+      .then((responses) => {
+        const tmpTStats: Number[] = [];
+        responses.forEach((response) => {
+          tmpTStats.push(response?.body?.tStat);
+        });
+        setTStats(tmpTStats);
       });
   }, [tickers]);
 

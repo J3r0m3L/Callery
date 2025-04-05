@@ -33,8 +33,8 @@ class StockAggregatesStoreApi {
 class StockAlgorithmsApi {
     private baseRequest: BaseRequest = new BaseRequest("stockAlgorithms");
 
-    performDickyFullerTest(stockPrices: number[], maxLag: number) {
-        return this.baseRequest.post('dickyFuller', { stockPrices, maxLag });
+    performDickyFullerTest(ticker: string, maxLag: number) {
+        return this.baseRequest.post('dickyFuller', { ticker, maxLag });
     }
 }
 

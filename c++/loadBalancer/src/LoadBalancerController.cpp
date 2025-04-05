@@ -146,32 +146,52 @@ int main() {
     int stockAlgorithmsIndex = 0;
 
     CROW_ROUTE(app, "/stockAlgorithms/dickyFuller").methods("POST"_method)
-    ([&stockAlgorithms, &stockAlgorithmsIndex](const crow::request& req) {
-        string backendUrl = stockAlgorithms.at(stockAlgorithmsIndex);
-        stockAlgorithmsIndex = (stockAlgorithmsIndex + 1) % stockAlgorithms.size();
+    ([&stockAggregateStores, &stockAggregatesStoreIndex, stockAlgorithms, &stockAlgorithmsIndex](const crow::request& req) {
+        string sasBackendUrl = stockAggregateStores.at(stockAggregatesStoreIndex);
+        stockAggregatesStoreIndex = (stockAggregatesStoreIndex + 1) % stockAggregateStores.size();
 
         // todo: add lag parameter, for now defaults to 1
         auto body = crow::json::load(req.body);
-        bool hasStockPrices = body.has("stockPrices") && body["stockPrices"].t() == crow::json::type::List;
 
-        if (!body || !hasStockPrices) {
+        bool hasTicker = body.has("ticker") && body["ticker"].t() == crow::json::type::String;
+        if (!body || !hasTicker) {
             return crow::response(400, "Invalid JSON");
         }
 
-        ClientContext context;
-        SaDickyFullerRequest request;
-        SaDickyFullerResponse response;
-        for (auto& it: body["stockPrices"]) {
-            request.add_stockprices(it.d());
+        ClientContext sasClient;
+        SasTableQuery sasRequest;
+        SasTableMsgs sasResponse; 
+
+        sasRequest.set_ticker(body["ticker"].s());
+
+        shared_ptr<Channel> sasChannel = grpc::CreateChannel(sasBackendUrl + ":8080", grpc::InsecureChannelCredentials());
+        StockAggregatesStoreService::Stub sasStub(sasChannel);
+
+        Status sasStatus = sasStub.queryStockAggregatesTable(&sasClient, sasRequest, &sasResponse);
+        if (!sasStatus.ok()) {
+            ostringstream os;
+            os << "Failed to retrieve stock data for " << body["ticker"].s();
+            return crow::response(500, os.str());
+        }
+
+        string saBackendUrl = stockAlgorithms.at(stockAlgorithmsIndex);
+        stockAlgorithmsIndex = (stockAlgorithmsIndex + 1) % stockAlgorithms.size();
+
+        ClientContext saContext;
+        SaDickyFullerRequest saRequest;
+        SaDickyFullerResponse saResponse;
+
+        for (auto& it: *sasResponse.mutable_msgs()) {
+            saRequest.add_stockprices(it.high());
         }
         
-        shared_ptr<Channel> channel = grpc::CreateChannel(backendUrl + ":8082", grpc::InsecureChannelCredentials());
-        StockAlgorithmsService::Stub stub(channel);
+        shared_ptr<Channel> saChannel = grpc::CreateChannel(saBackendUrl + ":8082", grpc::InsecureChannelCredentials());
+        StockAlgorithmsService::Stub saStub(saChannel);
 
-        Status status = stub.dickyFullerTest(&context, request, &response);
-        if (status.ok()) {
+        Status saStatus = saStub.dickyFullerTest(&saContext, saRequest, &saResponse);
+        if (saStatus.ok()) {
             string json_string;
-            static_cast<void>(google::protobuf::util::MessageToJsonString(response, &json_string));
+            static_cast<void>(google::protobuf::util::MessageToJsonString(saResponse, &json_string));
             crow::response res(json_string);
             res.set_header("Content-Type", "application/json");
             return res;

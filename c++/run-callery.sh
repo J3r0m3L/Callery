@@ -3,6 +3,11 @@ NETWORK="callery-network"
 # for now start services in specific order since that ties to network
 docker network create --subnet="172.20.0.0/16" "$NETWORK" 2>/dev/null || true
 
+if [ "$#" -eq 0 ]; then
+    echo "Please start services one at a time."
+    exit 1
+fi
+
 if [ "$1" = "sas-only" ] || [ -z "$1" ]; then # start this service 1st
     STOCK_AGGREGATES_STORE="stock-aggregates-store"
     STOCK_AGGREGATES_STORE_CONTAINER="stock-aggregates-store-container"
