@@ -9,6 +9,7 @@
 #include <grpcpp/grpcpp.h>
 #include <memory>
 #include <optional>
+#include <regex>
 #include <sstream>
 #include <string>
 #include <utility>
@@ -28,11 +29,12 @@ using std::make_pair;
 using std::optional;
 using std::ostringstream;
 using std::pair;
+using std::regex;
+using std::regex_match;
 using std::stoll;
 using std::string;
 using std::shared_ptr;
 using std::vector;
-
 
 int main() {
     crow::App<crow::CORSHandler> app;
@@ -53,12 +55,17 @@ int main() {
         if (!body) {
             return crow::response(400, "Invalid JSON");
         }
-        
+
         ClientContext context;
         SasTableQuery request;
         SasTableMsgs response; 
         if (body.has("ticker")) {
-            request.set_ticker(body["ticker"].s());
+            string ticker = body["ticker"].s();
+            regex isAlphaRegex("^[a-zA-Z]+$");
+            if (!regex_match(ticker, isAlphaRegex)) {
+                return crow::response(400, "Invalid JSON");
+            }
+            request.set_ticker(ticker);
         }
         if (body.has("timestampRange") && body["timestampRange"].t() == crow::json::type::List) {
             for (auto& it : body["timestampRange"]) {
@@ -156,8 +163,14 @@ int main() {
         bool hasTicker = body.has("ticker") && body["ticker"].t() == crow::json::type::String;
         if (!body || !hasTicker) {
             return crow::response(400, "Invalid JSON");
+        } 
+        
+        string ticker = body["ticker"].s();
+        regex isAlphaRegex("^[a-zA-Z]+$");
+        if (!regex_match(ticker, isAlphaRegex)) {
+            return crow::response(400, "Invalid JSON");
         }
-
+        
         ClientContext sasClient;
         SasTableQuery sasRequest;
         SasTableMsgs sasResponse; 

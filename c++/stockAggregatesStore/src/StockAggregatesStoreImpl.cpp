@@ -71,7 +71,7 @@ Status StockAggregatesStoreImpl::queryStockAggregatesTable(ServerContext* contex
     vwapRange 
   ));
 
-  // transfering too much data (stock prices every minute) for default protobuf size so changing to hourly for now
+  // transfering too much data (stock prices every minute) for default protobuf size so sampling every 60th
   for (int i = 0; i < msgs.size(); i+=60) {
     auto& msg = msgs.at(i);
     auto* data = response->mutable_msgs()->Add();
