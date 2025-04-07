@@ -41,7 +41,7 @@ POLYGON_IO_API_KEY=<API KEY>
 Modify the stocks and timestamps to personal needs.
 ```bash
 python3 StoreStockData.py
-mv StockData.db ../c++/stockAggregatesStore
+mv StockData.db ../../c++/stockAggregatesStore
 ```
 ### Start Services
 Ensure you have Docker installed. In the base directory, start the Stock Aggregates Store service.

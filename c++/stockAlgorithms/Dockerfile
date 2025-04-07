@@ -11,7 +11,7 @@ RUN apt update && apt install -y \
     git && apt clean \
     && mv /usr/include/eigen3/Eigen /usr/local/include/Eigen
 
-RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+RUN git clone --depth 1 --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
     cd grpc && \
     mkdir cmake/build && \
     cd cmake/build && \
@@ -27,8 +27,9 @@ RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
         -DgRPC_BUILD_GRPC_PHP_PLUGIN=OFF \
         -DgRPC_BUILD_GRPC_PYTHON_PLUGIN=OFF \
         -DgRPC_BUILD_GRPC_RUBY_PLUGIN=OFF \
-        ../.. && \
-    make -j 4 && \
+        -DCMAKE_BUILD_TYPE=Release \
+    ../.. && \
+    make -j$(nproc) && \
     make install
 
 WORKDIR /app
@@ -38,7 +39,7 @@ COPY stockAlgorithms /app/service
 RUN cd service && \
     mkdir -p build && \
     cd build && \
-    cmake .. && \
+    cmake -DCMAKE_BUILD_TYPE=Release .. && \
     make
 
 EXPOSE 8082
