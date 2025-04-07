@@ -14,14 +14,14 @@ RUN apt update && apt install -y \
     git && apt clean
     
 RUN cd /usr/local/include && \
-    git clone --depth 1 https://github.com/CrowCpp/Crow.git && \
+    git clone https://github.com/CrowCpp/Crow.git && \
     cd Crow && \
     mkdir build && \
     cd build && \
-    cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release && \
+    cmake .. -DCROW_BUILD_EXAMPLES=OFF -DCROW_BUILD_TESTS=OFF && \
     make install
 
-RUN git clone --depth 1 --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
     cd grpc && \
     mkdir cmake/build && \
     cd cmake/build && \
@@ -50,7 +50,7 @@ COPY sqlUtils /app/sqlUtils
 RUN cd service && \
     mkdir -p build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake .. && \
     make
 
 EXPOSE 8080

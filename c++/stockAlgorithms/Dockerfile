@@ -11,7 +11,7 @@ RUN apt update && apt install -y \
     git && apt clean \
     && mv /usr/include/eigen3/Eigen /usr/local/include/Eigen
 
-RUN git clone --depth 1 --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
+RUN git clone --recurse-submodules -b v1.57.0 https://github.com/grpc/grpc && \
     cd grpc && \
     mkdir cmake/build && \
     cd cmake/build && \
@@ -39,7 +39,7 @@ COPY stockAlgorithms /app/service
 RUN cd service && \
     mkdir -p build && \
     cd build && \
-    cmake -DCMAKE_BUILD_TYPE=Release .. && \
+    cmake .. && \
     make
 
 EXPOSE 8082
